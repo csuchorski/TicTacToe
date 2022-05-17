@@ -14,7 +14,7 @@ async function start() {
 }
 
 connection.onclose(() => {
-    console.log("Disconnected")
+    console.log("Disconnected");
 })
 
 start();

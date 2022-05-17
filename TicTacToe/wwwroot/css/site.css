@@ -1,3 +1,7 @@
+*{
+    box-sizing:border-box;
+}
+
 html {
   font-size: 14px;
 }
@@ -15,4 +19,20 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.square{
+    width:100px;
+    height:100px;
+    border:1px black solid;
+    background-color:aqua;
+}
+
+.square:hover{
+    background-color:dodgerblue;
+}
+
+.row{
+    display:flex;
+    flex-direction:row;
 }
