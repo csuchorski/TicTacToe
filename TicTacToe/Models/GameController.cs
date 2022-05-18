@@ -22,8 +22,28 @@
         {
             Board[x, y] = piece;
         }
+
+        public string IsGameOver()
+        {
+            if(IsMoveWinning() == true) return "gameover";
+            if (IsGameDrawn() == true) return "draw";
+            return "continue";
+        }
+
+        public bool IsGameDrawn()
+        {
+            byte count = 0;
+            Func<int, int, bool> draw = (x, y) => Board[x, y] != 0;
+            foreach (var square in Board)
+            {
+                if (square != 0) count++;
+            }
+            if(count == 9) return true;
+            return false;
+        }
         public bool IsMoveWinning()
         {
+            
             if (Board[0,0] + Board[0,1] + Board[0,2] == 3) return true;
 
             for (int i = 0; i < 3; i++)
