@@ -29,12 +29,22 @@ namespace TicTacToe.Hubs
             {
                 AvailableLobbies.Remove(LobbyId);
             }
+            if (LobbyCapacityDict[LobbyId] == 1)
+            {
+                AvailableLobbies.Add(LobbyId);
+            }
             LobbyAssignmentDict.Remove(connID);
         }
 
         public async Task JoinLobby(int LobbyId)
         {
-            
+            await Groups.AddToGroupAsync(Context.ConnectionId, Convert.ToString(LobbyId));
+            LobbyAssignmentDict.Add(Context.ConnectionId, LobbyId);
+            LobbyCapacityDict[LobbyId]++;
+            if(LobbyCapacityDict[LobbyId] == 2)
+            {
+                AvailableLobbies.Remove(LobbyId);
+            }
         }
 
         public async void JoinRandomLobby()
