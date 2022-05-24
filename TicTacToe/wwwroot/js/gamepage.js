@@ -2,6 +2,10 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/connect").build();
 
+connection.onclose(() => {
+    console.log("Disconnected");
+})
+
 async function start() {
     try {
         await connection.start();
@@ -13,8 +17,18 @@ async function start() {
     }
 }
 
-connection.onclose(() => {
-    console.log("Disconnected");
-})
+async function placeMove(x , y, piece) {
+
+}
+
+async function showDraw() {
+
+}
+
+async function showGameover(piece) {
+    alert("Game is over")
+}
+
+
 
 start();

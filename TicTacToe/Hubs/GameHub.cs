@@ -91,7 +91,7 @@ namespace TicTacToe.Hubs
             game.MakeMove(x, y, piece);
             if(game.IsGameOver() == "continue")
             {
-                Clients.Group(Convert.ToString(LobbyID)).SendAsync("placeMove");
+                Clients.Group(Convert.ToString(LobbyID)).SendAsync("placeMove", x, y, piece);
             }
             if (game.IsGameOver() == "draw")
             {
@@ -99,7 +99,7 @@ namespace TicTacToe.Hubs
             }
             else
             {
-                Clients.Group(Convert.ToString(LobbyID)).SendAsync("showGameover");
+                Clients.Group(Convert.ToString(LobbyID)).SendAsync("showGameover", piece);
             }
             return true;
         }
