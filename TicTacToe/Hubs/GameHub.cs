@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TicTacToe.Models;
 
 namespace TicTacToe.Hubs
 {
@@ -9,16 +10,18 @@ namespace TicTacToe.Hubs
         public static List<int> AvailableLobbies = new();
 
         Random rand = new();
+        GameController game = new();
 
         public async override Task<Task> OnDisconnectedAsync(Exception? exception)
         {
-            if(LobbyAssignmentDict.ContainsKey(Context.ConnectionId))
+            if (LobbyAssignmentDict.ContainsKey(Context.ConnectionId))
             {
                 await LeaveLobby(Context.ConnectionId);
-            }         
+            }
             return base.OnDisconnectedAsync(exception);
         }
 
+        //Lobby handling
 
         public async Task LeaveLobby(string connID)
         {
@@ -41,7 +44,7 @@ namespace TicTacToe.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, Convert.ToString(LobbyId));
             LobbyAssignmentDict.Add(Context.ConnectionId, LobbyId);
             LobbyCapacityDict[LobbyId]++;
-            if(LobbyCapacityDict[LobbyId] == 2)
+            if (LobbyCapacityDict[LobbyId] == 2)
             {
                 AvailableLobbies.Remove(LobbyId);
             }
@@ -50,7 +53,7 @@ namespace TicTacToe.Hubs
         public async void JoinRandomLobby()
         {
             int? LobbyId = FindLobby();
-            if(LobbyId == null)
+            if (LobbyId == null)
             {
                 LobbyId = CreateLobby();
             }
@@ -78,6 +81,27 @@ namespace TicTacToe.Hubs
             AvailableLobbies.Add(LobbyId);
 
             return LobbyId;
+        }
+
+        //Move handling
+
+        public bool TryMakeMove(byte x, byte y, byte piece, int LobbyID)
+        {
+            if (!game.IsMoveValid(x, y)) return false;
+            game.MakeMove(x, y, piece);
+            if(game.IsGameOver() == "continue")
+            {
+                Clients.Group(Convert.ToString(LobbyID)).SendAsync("placeMove");
+            }
+            if (game.IsGameOver() == "draw")
+            {
+                Clients.Group(Convert.ToString(LobbyID)).SendAsync("showDraw");
+            }
+            else
+            {
+                Clients.Group(Convert.ToString(LobbyID)).SendAsync("showGameover");
+            }
+            return true;
         }
     }
 }
