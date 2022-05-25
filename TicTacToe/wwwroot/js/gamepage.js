@@ -17,6 +17,10 @@ async function start() {
     }
 }
 
+function startMatch() {
+
+}
+
 async function placeMove(x , y, piece) {
 
 }
