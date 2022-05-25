@@ -26,17 +26,16 @@ namespace TicTacToe.Hubs
         public async Task LeaveLobby(string connID)
         {
             int LobbyId = LobbyAssignmentDict[connID];
-            await Groups.RemoveFromGroupAsync(connID, Convert.ToString(LobbyId));
-            LobbyCapacityDict[LobbyId]--;
-            if (LobbyCapacityDict[LobbyId] == 0)
-            {
-                AvailableLobbies.Remove(LobbyId);
-            }
-            if (LobbyCapacityDict[LobbyId] == 1)
-            {
-                AvailableLobbies.Add(LobbyId);
-            }
+            AvailableLobbies.Remove(LobbyId);
             LobbyAssignmentDict.Remove(connID);
+            string secondUser = LobbyAssignmentDict.First(val => val.Value == LobbyId).Key;
+            if (!string.IsNullOrEmpty(secondUser))
+            {
+                LobbyAssignmentDict.Remove(secondUser);
+                await Groups.RemoveFromGroupAsync(secondUser, Convert.ToString(LobbyId));
+            }
+            await Groups.RemoveFromGroupAsync(connID, Convert.ToString(LobbyId));
+            LobbyCapacityDict.Remove(LobbyId);
         }
 
         public async Task JoinLobby(int LobbyId)
