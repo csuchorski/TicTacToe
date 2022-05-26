@@ -17,7 +17,16 @@ async function start() {
     }
 }
 
+let stopBtn = document.getElementById("endBtn");
+endBtn.addEventListener("click", endMatch);
+
 function startMatch() {
+    board.style.display = "flex";
+}
+
+function endMatch() {
+    connection.invoke("LeaveLobby")
+    window.location.replace("https://localhost:7016");
 
 }
 

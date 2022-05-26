@@ -26,6 +26,7 @@ namespace TicTacToe.Hubs
         public async Task LeaveLobby(string connID)
         {
             int LobbyId = LobbyAssignmentDict[connID];
+            await Clients.Group(Convert.ToString(LobbyId)).SendAsync("endMatch");
             AvailableLobbies.Remove(LobbyId);
             LobbyAssignmentDict.Remove(connID);
             string secondUser = LobbyAssignmentDict.First(val => val.Value == LobbyId).Key;
