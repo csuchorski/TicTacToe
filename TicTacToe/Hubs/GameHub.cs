@@ -20,6 +20,11 @@ namespace TicTacToe.Hubs
             }
             return base.OnDisconnectedAsync(exception);
         }
+        public async override Task<Task> OnConnectedAsync()
+        {
+            await JoinRandomLobby();
+            return base.OnConnectedAsync();
+        }
 
         //Lobby handling
 
@@ -54,7 +59,7 @@ namespace TicTacToe.Hubs
             }
         }
 
-        public async void JoinRandomLobby()
+        public async Task JoinRandomLobby()
         {
             int? LobbyId = FindLobby();
             if (LobbyId == null)
@@ -85,6 +90,11 @@ namespace TicTacToe.Hubs
             AvailableLobbies.Add(LobbyId);
 
             return LobbyId;
+        }
+
+        public int GetLobbyId()
+        {
+            return LobbyAssignmentDict[Context.ConnectionId];
         }
 
         //Move handling

@@ -10,6 +10,7 @@ async function start() {
     try {
         await connection.start();
         console.log("Connected");
+        lobbyIdPara.textContent = connection.invoke("GetLobbyId");
     }
     catch (err) {
         console.log(err);
@@ -18,6 +19,8 @@ async function start() {
 }
 
 let stopBtn = document.getElementById("endBtn");
+const lobbyIdPara = document.getElementById("LobbyIdVal");
+
 endBtn.addEventListener("click", endMatch);
 
 function startMatch() {
@@ -45,3 +48,5 @@ async function showGameover(piece) {
 
 
 start();
+//setTimeout(() => "waiting", 3000)
+
