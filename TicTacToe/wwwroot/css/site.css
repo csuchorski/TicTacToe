@@ -36,3 +36,7 @@ body {
     display:flex;
     flex-direction:row;
 }
+
+#board{
+    display:none;
+}

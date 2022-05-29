@@ -6,11 +6,15 @@ connection.onclose(() => {
     console.log("Disconnected");
 })
 
+
+connection.on("startMatch", startMatch);
+connection.on("endMatch", endMatch);
+
 async function start() {
     try {
         await connection.start();
         console.log("Connected");
-        lobbyIdPara.textContent = connection.invoke("GetLobbyId");
+        lobbyIdPara.textContent = await connection.invoke("GetLobbyId");
     }
     catch (err) {
         console.log(err);
@@ -20,17 +24,20 @@ async function start() {
 
 let stopBtn = document.getElementById("endBtn");
 const lobbyIdPara = document.getElementById("LobbyIdVal");
+const teamValPara = document.getElementById("TeamVal");
 
 endBtn.addEventListener("click", endMatch);
 
-function startMatch() {
-    board.style.display = "flex";
+function startMatch(team) {
+    console.log("Match started")
+    teamValPara.textContent = team;
+    board.style.display = "block";
 }
 
 function endMatch() {
     connection.invoke("LeaveLobby")
     window.location.replace("https://localhost:7016");
-
+    console.log("Match ended")
 }
 
 async function placeMove(x , y, piece) {
@@ -48,5 +55,3 @@ async function showGameover(piece) {
 
 
 start();
-//setTimeout(() => "waiting", 3000)
-

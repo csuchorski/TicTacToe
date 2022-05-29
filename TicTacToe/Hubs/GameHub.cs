@@ -32,8 +32,11 @@ namespace TicTacToe.Hubs
         {
             int LobbyId = LobbyAssignmentDict[connID];
             await Clients.Group(Convert.ToString(LobbyId)).SendAsync("endMatch");
+
+            //If one player leaves the whole lobby gets disbanded and match is over
             AvailableLobbies.Remove(LobbyId);
             LobbyAssignmentDict.Remove(connID);
+
             string secondUser = LobbyAssignmentDict.First(val => val.Value == LobbyId).Key;
             if (!string.IsNullOrEmpty(secondUser))
             {
@@ -54,8 +57,8 @@ namespace TicTacToe.Hubs
                 var players = LobbyAssignmentDict.Where(a => a.Value == LobbyId).Select(k => k.Key);
                  
                 AvailableLobbies.Remove(LobbyId);
-                await Clients.User(players.ElementAt(0)).SendAsync("startMatch", "first");
-                await Clients.User(players.ElementAt(1)).SendAsync("startMatch", "second");
+                await Clients.Client(players.ElementAt(0)).SendAsync("startMatch", "first");
+                await Clients.Client(players.ElementAt(1)).SendAsync("startMatch", "second");
             }
         }
 
