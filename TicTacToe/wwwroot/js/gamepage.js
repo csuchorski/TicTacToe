@@ -6,9 +6,30 @@ connection.onclose(() => {
     console.log("Disconnected");
 })
 
-
 connection.on("startMatch", startMatch);
 connection.on("endMatch", endMatch);
+
+let stopBtn = document.getElementById("endBtn");
+const lobbyIdPara = document.getElementById("LobbyIdVal");
+const teamValPara = document.getElementById("TeamVal");
+const boardArray = [[0,0,0],[0,0,0],[0,0,0]]; //0=>empty, 1=>circle, 2=>cross
+const squareHTMLCollection = document.getElementsByClassName("square");
+const squareArray = [...squareHTMLCollection];
+
+endBtn.addEventListener("click", endMatch);
+
+squareArray.forEach(square => {
+    square.addEventListener('click', () => {
+        let row = square.id.charAt(7);
+        let col = square.id.charAt(9);
+        if (boardArray[row][col] == 0) {
+            placeMove(col, row, teamValPara.textContent);
+        }
+        else {
+            alert("Square taken");
+        }
+    })
+})
 
 async function start() {
     try {
@@ -21,12 +42,6 @@ async function start() {
         setTimeout(start, 5000);
     }
 }
-
-let stopBtn = document.getElementById("endBtn");
-const lobbyIdPara = document.getElementById("LobbyIdVal");
-const teamValPara = document.getElementById("TeamVal");
-
-endBtn.addEventListener("click", endMatch);
 
 function startMatch(team) {
     console.log("Match started")
@@ -41,7 +56,10 @@ function endMatch() {
 }
 
 async function placeMove(x , y, piece) {
-
+    let verdict = await connection.invoke("TryMakeMove", x, y, piece, lobbyIdPara.textContent);
+    if (!verdict) {
+        alert("Move invalid");
+    }
 }
 
 async function showDraw() {
@@ -51,7 +69,5 @@ async function showDraw() {
 async function showGameover(piece) {
     alert("Game is over")
 }
-
-
 
 start();
