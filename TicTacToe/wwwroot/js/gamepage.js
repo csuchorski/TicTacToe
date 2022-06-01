@@ -60,6 +60,9 @@ async function placeMove(x , y, piece) {
     if (!verdict) {
         alert("Move invalid");
     }
+    else {
+
+    }
 }
 
 async function showDraw() {

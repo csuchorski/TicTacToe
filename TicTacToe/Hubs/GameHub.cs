@@ -10,7 +10,6 @@ namespace TicTacToe.Hubs
         public static List<int> AvailableLobbies = new();
 
         Random rand = new();
-        GameController game = new();
 
         public async override Task<Task> OnDisconnectedAsync(Exception? exception)
         {
@@ -45,6 +44,7 @@ namespace TicTacToe.Hubs
             }
             await Groups.RemoveFromGroupAsync(connID, Convert.ToString(LobbyId));
             LobbyCapacityDict.Remove(LobbyId);
+            GameStorage.gameStorage.Remove(LobbyId);
         }
 
         public async Task JoinLobby(int LobbyId)
@@ -54,6 +54,7 @@ namespace TicTacToe.Hubs
             LobbyCapacityDict[LobbyId]++;
             if (LobbyCapacityDict[LobbyId] == 2)
             {
+                GameStorage.gameStorage.Add(LobbyId, new GameController());
                 var players = LobbyAssignmentDict.Where(a => a.Value == LobbyId).Select(k => k.Key);
                  
                 AvailableLobbies.Remove(LobbyId);
@@ -104,13 +105,13 @@ namespace TicTacToe.Hubs
 
         public bool TryMakeMove(byte x, byte y, byte piece, int LobbyID)
         {
-            if (!game.IsMoveValid(x, y)) return false;
-            game.MakeMove(x, y, piece);
-            if(game.IsGameOver() == "continue")
+            if (!GameStorage.gameStorage[LobbyID].IsMoveValid(x, y)) return false;
+            GameStorage.gameStorage[LobbyID].MakeMove(x, y, piece);
+            if(GameStorage.gameStorage[LobbyID].IsGameOver() == "continue")
             {
                 Clients.Group(Convert.ToString(LobbyID)).SendAsync("placeMove", x, y, piece);
             }
-            if (game.IsGameOver() == "draw")
+            if (GameStorage.gameStorage[LobbyID].IsGameOver() == "draw")
             {
                 Clients.Group(Convert.ToString(LobbyID)).SendAsync("showDraw");
             }
