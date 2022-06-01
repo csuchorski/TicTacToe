@@ -111,7 +111,7 @@ namespace TicTacToe.Hubs
             {
                 Clients.Group(Convert.ToString(LobbyID)).SendAsync("placeMove", x, y, piece);
             }
-            if (GameStorage.gameStorage[LobbyID].IsGameOver() == "draw")
+            else if (GameStorage.gameStorage[LobbyID].IsGameOver() == "draw")
             {
                 Clients.Group(Convert.ToString(LobbyID)).SendAsync("showDraw");
             }

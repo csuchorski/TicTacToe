@@ -9,6 +9,10 @@ connection.onclose(() => {
 connection.on("startMatch", startMatch);
 connection.on("endMatch", endMatch);
 
+connection.on("placeMove", placeMove);
+connection.on("showDraw", showDraw);
+connection.on("showGameover", showGameover);
+
 let stopBtn = document.getElementById("endBtn");
 const lobbyIdPara = document.getElementById("LobbyIdVal");
 const teamValPara = document.getElementById("TeamVal");
@@ -19,11 +23,11 @@ const squareArray = [...squareHTMLCollection];
 endBtn.addEventListener("click", endMatch);
 
 squareArray.forEach(square => {
-    square.addEventListener('click', () => {
+    square.addEventListener('click', async () => {
         let row = Number(square.id.charAt(7));
         let col = Number(square.id.charAt(9));
         if (boardArray[row][col] == 0) {
-            placeMove(col, row, Number(teamValPara.textContent));
+            await connection.invoke("TryMakeMove", row, col, Number(teamValPara.textContent), Number(lobbyIdPara.textContent));
         }
         else {
             alert("Square taken");
@@ -49,20 +53,17 @@ function startMatch(team) {
     board.style.display = "block";
 }
 
+async function placeMove(x,y,piece) {
+    boardArray[x][y] = piece;
+    let squareToChangeId = `square-${x}-${y}`; 
+    console.log(squareToChangeId);
+    document.getElementById(squareToChangeId).textContent = piece;
+}
+
 function endMatch() {
     connection.invoke("LeaveLobby")
     window.location.replace("https://localhost:7016");
     console.log("Match ended")
-}
-
-async function placeMove(x , y, piece) {
-    let verdict = await connection.invoke("TryMakeMove", x, y, piece, Number(lobbyIdPara.textContent));
-    if (!verdict) {
-        alert("Move invalid");
-    }
-    else {
-
-    }
 }
 
 async function showDraw() {
