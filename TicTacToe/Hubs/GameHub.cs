@@ -57,8 +57,8 @@ namespace TicTacToe.Hubs
                 var players = LobbyAssignmentDict.Where(a => a.Value == LobbyId).Select(k => k.Key);
                  
                 AvailableLobbies.Remove(LobbyId);
-                await Clients.Client(players.ElementAt(0)).SendAsync("startMatch", "first");
-                await Clients.Client(players.ElementAt(1)).SendAsync("startMatch", "second");
+                await Clients.Client(players.ElementAt(0)).SendAsync("startMatch", 2);
+                await Clients.Client(players.ElementAt(1)).SendAsync("startMatch", 1);
             }
         }
 

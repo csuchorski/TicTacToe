@@ -20,10 +20,10 @@ endBtn.addEventListener("click", endMatch);
 
 squareArray.forEach(square => {
     square.addEventListener('click', () => {
-        let row = square.id.charAt(7);
-        let col = square.id.charAt(9);
+        let row = Number(square.id.charAt(7));
+        let col = Number(square.id.charAt(9));
         if (boardArray[row][col] == 0) {
-            placeMove(col, row, teamValPara.textContent);
+            placeMove(col, row, Number(teamValPara.textContent));
         }
         else {
             alert("Square taken");
@@ -56,7 +56,7 @@ function endMatch() {
 }
 
 async function placeMove(x , y, piece) {
-    let verdict = await connection.invoke("TryMakeMove", x, y, piece, lobbyIdPara.textContent);
+    let verdict = await connection.invoke("TryMakeMove", x, y, piece, Number(lobbyIdPara.textContent));
     if (!verdict) {
         alert("Move invalid");
     }
