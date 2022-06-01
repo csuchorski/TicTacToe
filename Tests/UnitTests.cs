@@ -79,5 +79,15 @@ namespace Tests
 
             Assert.False(gameController.IsGameOver() == "draw");
         }
+        [Fact]
+        public void IsGameOverContinueTrue()
+        {
+            GameController gameController = new GameController();
+            gameController.Board[1, 1] = 1;
+
+
+            Assert.True(gameController.IsGameOver() == "continue");
+        }
+
     }
 }
