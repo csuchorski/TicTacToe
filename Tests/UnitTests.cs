@@ -37,10 +37,11 @@ namespace Tests
         {
             GameController gameController = new GameController();
             gameController.Board[0, 0] = 1;
-            gameController.Board[0, 1] = 2;
-            gameController.Board[0, 2] = 1;
+            gameController.Board[0, 1] = 1;
+            gameController.Board[1, 1] = 2;
+            gameController.Board[2, 1] = 2;
 
-            Assert.True(gameController.IsMoveWinning() == false);
+            Assert.True(gameController.IsGameOver() == "continue");
         }
 
         [Fact]
@@ -80,14 +81,27 @@ namespace Tests
             Assert.False(gameController.IsGameOver() == "draw");
         }
         [Fact]
-        public void IsGameOverContinueTrue()
+        public void IsGameOverGameoverTrue()
         {
             GameController gameController = new GameController();
-            gameController.Board[1, 1] = 1;
+            gameController.Board[0, 0] = 1;
+            gameController.Board[0, 1] = 1;
+            gameController.Board[0, 2] = 1;
 
-
-            Assert.True(gameController.IsGameOver() == "continue");
+            Assert.True(gameController.IsGameOver() == "gameover");
         }
+        [Fact]
+        public void GameOverHorizontalTrue()
+        {
+            GameController gameController = new();
+            gameController.Board[0, 0] = 1;
+            gameController.Board[0, 1] = 1;
+            gameController.Board[0, 2] = 1;
+            gameController.Board[1, 0] = 2;
+            gameController.Board[1, 1] = 2;
+            gameController.Board[1, 2] = 2;
 
+            Assert.True(gameController.CheckForVerticalWin() == true);
+        }
     }
 }
