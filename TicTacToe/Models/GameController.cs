@@ -99,6 +99,25 @@
 
         public bool CheckForDiagonalWin()
         {
+            int counterLeftToRight = 0;
+            int counterRightToLeft = 0;
+            int checkForVal = Board[1, 1];
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (Board[i,i] == checkForVal) counterLeftToRight++;
+            }
+            if(counterLeftToRight == 3) return true;
+
+            int j = 0;
+            for (int i = 2; i >= 0; i--)
+            {
+                if (Board[i, j] == checkForVal) counterRightToLeft++;
+                j++;
+            }
+            if (counterRightToLeft == 3) return true;
+
+
             return false;
         }
     }
