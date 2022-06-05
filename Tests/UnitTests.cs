@@ -103,5 +103,19 @@ namespace Tests
 
             Assert.True(gameController.CheckForVerticalWin() == true);
         }
+
+        [Fact]
+        public void GameOverVerticalTrue()
+        {
+            GameController gameController = new();
+            gameController.Board[0, 0] = 2;
+            gameController.Board[0, 1] = 2;
+            gameController.Board[0, 2] = 2;
+            gameController.Board[1, 0] = 0;
+            gameController.Board[1, 1] = 1;
+            gameController.Board[2, 1] = 1;
+
+            Assert.True(gameController.CheckForVerticalWin() == true);
+        }
     }
 }
