@@ -62,16 +62,18 @@ async function placeMove(x,y,piece) {
 
 function endMatch() {
     connection.invoke("LeaveLobby")
-    window.location.replace("https://localhost:7016");
+    window.location.replace("/");
     console.log("Match ended")
 }
 
 async function showDraw() {
-
+    alert("Game drawn");
+    window.location.replace("/");
 }
 
 async function showGameover(piece) {
-    alert("Game is over")
+    alert("Game is over");
+    window.location.replace("/");
 }
 
 start();
