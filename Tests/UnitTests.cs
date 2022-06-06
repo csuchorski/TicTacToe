@@ -146,5 +146,17 @@ namespace Tests
 
             Assert.True(gameController.CheckForDiagonalWin() == true);
         }
+
+        [Fact]
+        public void GameOverSingleCornerPlaced()
+        {
+            GameController gameController = new();
+            gameController.Board[0, 0] = 1;
+
+
+            Assert.True(gameController.CheckForDiagonalWin() == false);
+        }
+
+
     }
 }

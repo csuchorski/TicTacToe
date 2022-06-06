@@ -102,7 +102,7 @@
             int counterLeftToRight = 0;
             int counterRightToLeft = 0;
             int checkForVal = Board[1, 1];
-
+            if (checkForVal == 0) return false; //if middle is empty there's no point in checking further
             for (int i = 0; i < 3; i++)
             {
                 if (Board[i,i] == checkForVal) counterLeftToRight++;
