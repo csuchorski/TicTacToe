@@ -33,7 +33,6 @@
         public bool IsGameDrawn()
         {
             byte count = 0;
-            Func<int, int, bool> draw = (x, y) => Board[x, y] != 0;
             foreach (var square in Board)
             {
                 if (square != 0) count++;

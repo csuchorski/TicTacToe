@@ -23,16 +23,7 @@ const squareArray = [...squareHTMLCollection];
 endBtn.addEventListener("click", endMatch);
 
 squareArray.forEach(square => {
-    square.addEventListener('click', async () => {
-        let row = Number(square.id.charAt(7));
-        let col = Number(square.id.charAt(9));
-        if (boardArray[row][col] == 0) {
-            await connection.invoke("TryMakeMove", row, col, Number(teamValPara.textContent), Number(lobbyIdPara.textContent));
-        }
-        else {
-            alert("Square taken");
-        }
-    })
+    square.addEventListener('click', boardEventListener)
 })
 
 async function start() {
@@ -51,6 +42,17 @@ function startMatch(team) {
     console.log("Match started")
     teamValPara.textContent = team;
     board.style.display = "block";
+}
+
+async function boardEventListener() {
+    let row = Number(event.target.id.charAt(7));
+    let col = Number(event.target.id.charAt(9));
+    if (boardArray[row][col] == 0) {
+        await connection.invoke("TryMakeMove", row, col, Number(teamValPara.textContent), Number(lobbyIdPara.textContent));
+    }
+    else {
+        alert("Square taken");
+    }
 }
 
 async function placeMove(x,y,piece) {
