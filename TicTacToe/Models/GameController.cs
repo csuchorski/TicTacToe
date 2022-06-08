@@ -9,6 +9,15 @@
             set { board = value; }
         }
 
+        private bool turnController = true;
+
+        public bool TurnController
+        {
+            get { return turnController; }
+            set { turnController = value; }
+        }
+
+
         public bool IsMoveValid(byte x, byte y)
         {
             if (Board[x, y] != 0)

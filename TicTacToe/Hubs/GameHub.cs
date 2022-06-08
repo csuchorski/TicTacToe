@@ -60,6 +60,7 @@ namespace TicTacToe.Hubs
                 AvailableLobbies.Remove(LobbyId);
                 await Clients.Client(players.ElementAt(0)).SendAsync("startMatch", 2);
                 await Clients.Client(players.ElementAt(1)).SendAsync("startMatch", 1);
+                await Clients.Client(players.ElementAt(1)).SendAsync("allowMove");
             }
         }
 

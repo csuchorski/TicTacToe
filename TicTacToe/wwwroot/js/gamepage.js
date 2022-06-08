@@ -12,19 +12,23 @@ connection.on("endMatch", endMatch);
 connection.on("placeMove", placeMove);
 connection.on("showDraw", showDraw);
 connection.on("showGameover", showGameover);
+connection.on("allowMove", () => {
+    squareArray.forEach(square => {
+        square.addEventListener('click', boardEventListener)
+    })
+});
+
 
 let stopBtn = document.getElementById("endBtn");
 const lobbyIdPara = document.getElementById("LobbyIdVal");
 const teamValPara = document.getElementById("TeamVal");
-const boardArray = [[0,0,0],[0,0,0],[0,0,0]]; //0=>empty, 1=>circle, 2=>cross
+const boardArray = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]; //0=>empty, 1=>circle, 2=>cross
 const squareHTMLCollection = document.getElementsByClassName("square");
 const squareArray = [...squareHTMLCollection];
 
 endBtn.addEventListener("click", endMatch);
 
-squareArray.forEach(square => {
-    square.addEventListener('click', boardEventListener)
-})
+
 
 async function start() {
     try {
@@ -49,15 +53,19 @@ async function boardEventListener() {
     let col = Number(event.target.id.charAt(9));
     if (boardArray[row][col] == 0) {
         await connection.invoke("TryMakeMove", row, col, Number(teamValPara.textContent), Number(lobbyIdPara.textContent));
+
+        squareArray.forEach(square => {
+            square.removeEventListener('click', boardEventListener)
+        })
     }
     else {
         alert("Square taken");
     }
 }
 
-async function placeMove(x,y,piece) {
+async function placeMove(x, y, piece) {
     boardArray[x][y] = piece;
-    let squareToChangeId = `square-${x}-${y}`; 
+    let squareToChangeId = `square-${x}-${y}`;
     console.log(squareToChangeId);
     document.getElementById(squareToChangeId).textContent = piece;
 }
